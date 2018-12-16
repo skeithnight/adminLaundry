@@ -18,6 +18,15 @@ public class MenuLaundry {
     @Expose
     private String satuan;
 
+    public MenuLaundry() {
+    }
+
+    public MenuLaundry(String jenis, Integer harga, String satuan) {
+        this.jenis = jenis;
+        this.harga = harga;
+        this.satuan = satuan;
+    }
+
     public String getId() {
         return id;
     }

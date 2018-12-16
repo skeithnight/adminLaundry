@@ -1,7 +1,10 @@
 package com.macbook.adminlaundry.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,7 +12,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.google.gson.Gson;
 import com.macbook.adminlaundry.R;
 import com.macbook.adminlaundry.TampilDialog;
@@ -28,7 +34,7 @@ import retrofit2.Response;
 import java.util.ArrayList;
 
 public class ListDataActivity extends AppCompatActivity {
-    String menu, token;
+    String menu, token, name;
 
     static String TAG = "Testing";
     private TampilDialog tampilDialog;
@@ -36,6 +42,9 @@ public class ListDataActivity extends AppCompatActivity {
     SharedPreferences mSPLogin;
     // RecyclerView
     RecyclerView recyclerView;
+
+    @BindView(R.id.fab_add_data)
+    FloatingActionButton fabAddData;
 
 
     @Override
@@ -50,9 +59,24 @@ public class ListDataActivity extends AppCompatActivity {
 
         getData();
     }
+
+    @OnClick(R.id.fab_add_data)
+    public void addData(){
+        Intent intent = new Intent(this,DetailDataActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    @SuppressLint("RestrictedApi")
     private void getData() {
         mSPLogin = getSharedPreferences("Login", Context.MODE_PRIVATE);
         token = mSPLogin.getString("token",null);
+        name = mSPLogin.getString("name",null);
+
+//        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+        if (name.equals("adminis")){
+            fabAddData.setVisibility(View.VISIBLE);
+        }
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
             menu= null;

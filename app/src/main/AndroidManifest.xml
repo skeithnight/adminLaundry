@@ -35,7 +35,10 @@
                 android:name=".activities.DetailPesananActivity"
                 android:parentActivityName=".MainActivity">
         </activity>
-        <activity android:name=".activities.DetailDataActivity">
+        <activity
+                android:label="Detail Data"
+                android:parentActivityName=".activities.ListDataActivity"
+                android:name=".activities.DetailDataActivity">
         </activity>
     </application>
 

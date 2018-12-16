@@ -14,6 +14,9 @@ public interface DataService {
     @GET("/menu-laundry")
     Call<ArrayList<MenuLaundry>> getListMenuLaundry(@Header("Authorization") String token);
 
+    @POST("/menu-laundry")
+    Call<ResponseBody> postMenuLaundry(@Header("Authorization") String token, @Body MenuLaundry menuLaundry);
+
     @GET("/cabang")
     Call<ArrayList<Cabang>> getListCabang(@Header("Authorization") String token);
 
