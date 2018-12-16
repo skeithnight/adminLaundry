@@ -20,13 +20,11 @@ public interface DataService {
     @GET("/kurir")
     Call<ArrayList<Kurir>> getListKurir(@Header("Authorization") String token);
 
-    @GET("/transaksi/customer/{idUser}")
-    Call<ArrayList<Transaksi>> getListTransaksi(@Header("Authorization") String token, @Path("idUser") String idUser);
+    @GET("/transaksi")
+    Call<ArrayList<Transaksi>> getListTransaksi(@Header("Authorization") String token);
 
-    @POST("/transaksi/auto-set-cabang/{latitude}/{longitude}")
+    @POST("/transaksi")
     Call<ResponseBody> postTransaksi(@Header("Authorization") String token,
-                                     @Path("latitude") String latitude,
-                                     @Path("longitude") String longitude,
                                      @Body Transaksi transaksi);
 
     @POST("/transaksi")

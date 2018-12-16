@@ -1,5 +1,6 @@
 package com.macbook.adminlaundry.api;
 
+import com.macbook.adminlaundry.secret.SecretData;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

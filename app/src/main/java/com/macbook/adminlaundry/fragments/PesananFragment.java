@@ -73,7 +73,7 @@ public class PesananFragment extends Fragment {
         if (token != null) {
 
             DataService dataService = APIClient.getClient().create(DataService.class);
-            dataService.getListTransaksi("Bearer " + token, idUser).enqueue(new Callback<ArrayList<Transaksi>>() {
+            dataService.getListTransaksi("Bearer " + token).enqueue(new Callback<ArrayList<Transaksi>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Transaksi>> call, Response<ArrayList<Transaksi>> response) {
                     tampilDialog.dismissLoading();
