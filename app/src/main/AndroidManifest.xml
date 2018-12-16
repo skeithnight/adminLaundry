@@ -28,12 +28,14 @@
                 android:label="@string/title_activity_login">
         </activity>
         <activity
-                android:parentActivityName=".MainActivity"
-                android:name=".activities.ListDataActivity">
+                android:name=".activities.ListDataActivity"
+                android:parentActivityName=".MainActivity">
         </activity>
         <activity
-                android:parentActivityName=".MainActivity"
-                android:name=".activities.DetailPesananActivity">
+                android:name=".activities.DetailPesananActivity"
+                android:parentActivityName=".MainActivity">
+        </activity>
+        <activity android:name=".activities.DetailDataActivity">
         </activity>
     </application>
 

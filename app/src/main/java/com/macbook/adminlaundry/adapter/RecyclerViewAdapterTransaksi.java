@@ -39,6 +39,7 @@ public class RecyclerViewAdapterTransaksi extends RecyclerView.Adapter<RecyclerV
 
         holder.idPesanan.setText(Transaksi.getId() == null ? "null" : Transaksi.getId());
         holder.tanggal_masuk.setText(Transaksi.getWaktuPesan() == null ? "null" : getDate(Transaksi.getWaktuPesan()));
+        holder.status.setText(Transaksi.getStatus() == null ? "null" : Transaksi.getStatus());
         holder.toko.setText(Transaksi.getCabang().getNama() == null ? "null" : Transaksi.getCabang().getNama());
 
         setLogoStatus(holder, Transaksi.getStatus());
@@ -80,7 +81,7 @@ public class RecyclerViewAdapterTransaksi extends RecyclerView.Adapter<RecyclerV
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView idPesanan, tanggal_masuk, toko;
+        public TextView idPesanan, tanggal_masuk, toko, status;
         public CircleImageView statusLogo;
         public CardView cdPesanan;
         public View mView;
@@ -91,6 +92,7 @@ public class RecyclerViewAdapterTransaksi extends RecyclerView.Adapter<RecyclerV
             idPesanan = (TextView) view.findViewById(R.id.tv_id_pesanan);
             tanggal_masuk = (TextView) view.findViewById(R.id.tv_tanggal_masuk);
             toko = (TextView) view.findViewById(R.id.tv_toko);
+            status = (TextView) view.findViewById(R.id.tv_status);
             statusLogo = (CircleImageView) view.findViewById(R.id.status_logo);
             cdPesanan = (CardView) view.findViewById(R.id.cd_pesanan);
         }

@@ -6,7 +6,6 @@
               android:layout_height="match_parent" android:padding="10dp" android:orientation="vertical"
               tools:context=".fragments.PesananFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_list_pesanan"
             android:scrollbars="vertical"

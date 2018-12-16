@@ -32,7 +32,8 @@ public class PesananFragment extends Fragment {
 
 
     View mView;
-    String token, idUser;
+    String token;
+    String idUser;
 
     static String TAG = "Testing";
     private TampilDialog tampilDialog;
