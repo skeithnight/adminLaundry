@@ -1,16 +1,15 @@
 package com.macbook.adminlaundry.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -21,6 +20,14 @@ import com.macbook.adminlaundry.api.APIClient;
 import com.macbook.adminlaundry.api.DataService;
 import com.macbook.adminlaundry.models.MenuLaundry;
 import com.macbook.adminlaundry.models.Transaksi;
+import com.microblink.MicroblinkSDK;
+import com.microblink.activity.BarcodeScanActivity;
+import com.microblink.entities.recognizers.Recognizer;
+import com.microblink.entities.recognizers.RecognizerBundle;
+import com.microblink.entities.recognizers.blinkbarcode.barcode.BarcodeRecognizer;
+import com.microblink.entities.recognizers.blinkbarcode.pdf417.Pdf417Recognizer;
+import com.microblink.uisettings.ActivityRunner;
+import com.microblink.uisettings.BarcodeUISettings;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +39,10 @@ import java.util.Locale;
 
 public class DetailPesananActivity extends AppCompatActivity {
 
+    //  Blink ID
+    private RecognizerBundle mRecognizerBundle;
+    private Pdf417Recognizer pdf417Recognizer;
+    private static int Request_Code_Scanning = 1;
     private static String TAG = "Testing";
     Transaksi transaksi;
     private String token, idUser;
@@ -58,7 +69,56 @@ public class DetailPesananActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         tampilDialog = new TampilDialog(this);
 
+        //        Blink ID
+        try {
+            MicroblinkSDK.setLicenseFile("MB_com.macbook.adminlaundry_Pdf417Mobi_Android_2019-02-25.mblic", this);
+            // setup views, as you would normally do in onCreate callback
+
+            // create Pdf417Recognizer
+            pdf417Recognizer = new Pdf417Recognizer();
+
+            // bundle recognizers into RecognizerBundle
+            mRecognizerBundle = new RecognizerBundle(pdf417Recognizer);
+        }catch (Exception e){
+            tampilDialog.showDialog("Error",e.getMessage(),"");
+        }
         getData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Request_Code_Scanning) {
+            if (resultCode == BarcodeScanActivity.RESULT_OK && data != null) {
+                // load the data into all recognizers bundled within your RecognizerBundle
+
+                mRecognizerBundle.loadFromIntent(data);
+
+                // now every recognizer object that was bundled within RecognizerBundle
+                // has been updated with results obtained during scanning session
+
+                // you can get the result by invoking getResult on recognizer
+                Pdf417Recognizer.Result result = pdf417Recognizer.getResult();
+                if (result.getResultState() == Recognizer.Result.State.Valid) {
+                    // result is valid, you can use it however you wish
+                    Log.i(TAG, "onActivityResult: "+result.getStringData());
+                }else {
+                    Log.i(TAG, "onActivityResult: gagal");
+                }
+            }
+        }
+    }
+
+    // Blink ID Start activity scanning
+    public void startScanning() {
+        // Settings for BarcodeScanActivity Activity
+        BarcodeUISettings settings = new BarcodeUISettings(mRecognizerBundle);
+
+        // tweak settings as you wish
+
+        // Start activity
+        ActivityRunner.startActivityForResult(this, Request_Code_Scanning, settings);
     }
 
     private void getData() {
@@ -85,7 +145,7 @@ public class DetailPesananActivity extends AppCompatActivity {
         for (MenuLaundry item : transaksi.getMenuLaundry()
                 ) {
             list.add(item.getJenis() + " | Rp. " + item.getHarga() + "/" + item.getSatuan());
-            totalTagihan += item.getHarga();
+            totalTagihan += (item.getHarga() == null)?0:item.getHarga();
         }
 
         String[] arrayPilihan = list.toArray(new String[list.size()]);
@@ -157,6 +217,11 @@ public class DetailPesananActivity extends AppCompatActivity {
                 tampilDialog.showDialog("Failed", t.getMessage(),"");
             }
         });
+    }
+
+    @OnClick(R.id.btn_scan_barcode)
+    public void scanBarcode(){
+        startScanning();
     }
 
 }
