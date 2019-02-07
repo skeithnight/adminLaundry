@@ -40,7 +40,7 @@ public class RecyclerViewAdapterTransaksi extends RecyclerView.Adapter<RecyclerV
         holder.idPesanan.setText(Transaksi.getId() == null ? "null" : Transaksi.getId());
         holder.tanggal_masuk.setText(Transaksi.getWaktuPesan() == null ? "null" : getDate(Transaksi.getWaktuPesan()));
         holder.status.setText(Transaksi.getStatus() == null ? "null" : Transaksi.getStatus());
-        holder.toko.setText(Transaksi.getCabang().getNama() == null ? "null" : Transaksi.getCabang().getNama());
+        holder.toko.setText(Transaksi.getCabang() == null ? "null" : Transaksi.getCabang().getNama());
 
         setLogoStatus(holder, Transaksi.getStatus());
 

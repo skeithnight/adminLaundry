@@ -19,6 +19,7 @@ import com.macbook.adminlaundry.TampilDialog;
 import com.macbook.adminlaundry.api.APIClient;
 import com.macbook.adminlaundry.api.DataService;
 import com.macbook.adminlaundry.models.MenuLaundry;
+import com.macbook.adminlaundry.models.Service;
 import com.macbook.adminlaundry.models.Transaksi;
 import com.microblink.MicroblinkSDK;
 import com.microblink.activity.BarcodeScanActivity;
@@ -39,18 +40,11 @@ import java.util.Locale;
 
 public class DetailPesananActivity extends AppCompatActivity {
 
-    //  Blink ID
-    private RecognizerBundle mRecognizerBundle;
-    private Pdf417Recognizer pdf417Recognizer;
     private static int Request_Code_Scanning = 1;
     private static String TAG = "Testing";
     Transaksi transaksi;
-    private String token, idUser;
-
-    private TampilDialog tampilDialog;
     //    SharedPreferences
     SharedPreferences mSPLogin;
-
     @BindView(R.id.id_pesanan)
     EditText idPesanan;
     @BindView(R.id.nama_pemesan)
@@ -61,6 +55,11 @@ public class DetailPesananActivity extends AppCompatActivity {
     ListView lvLayananPesan;
     @BindView(R.id.btn_detail_pesanan)
     Button btnDetailPesan;
+    //  Blink ID
+    private RecognizerBundle mRecognizerBundle;
+    private Pdf417Recognizer pdf417Recognizer;
+    private String token, idUser;
+    private TampilDialog tampilDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +78,8 @@ public class DetailPesananActivity extends AppCompatActivity {
 
             // bundle recognizers into RecognizerBundle
             mRecognizerBundle = new RecognizerBundle(pdf417Recognizer);
-        }catch (Exception e){
-            tampilDialog.showDialog("Error",e.getMessage(),"");
+        } catch (Exception e) {
+            tampilDialog.showDialog("Error", e.getMessage(), "");
         }
         getData();
     }
@@ -102,8 +101,8 @@ public class DetailPesananActivity extends AppCompatActivity {
                 Pdf417Recognizer.Result result = pdf417Recognizer.getResult();
                 if (result.getResultState() == Recognizer.Result.State.Valid) {
                     // result is valid, you can use it however you wish
-                    Log.i(TAG, "onActivityResult: "+result.getStringData());
-                }else {
+                    Log.i(TAG, "onActivityResult: " + result.getStringData());
+                } else {
                     Log.i(TAG, "onActivityResult: gagal");
                 }
             }
@@ -142,10 +141,12 @@ public class DetailPesananActivity extends AppCompatActivity {
 
         ArrayList<String> list = new ArrayList<>();
         double totalTagihan = 0;
-        for (MenuLaundry item : transaksi.getMenuLaundry()
+        for (Service item : transaksi.getMenuLaundry()
                 ) {
-            list.add(item.getJenis() + " | Rp. " + item.getHarga() + "/" + item.getSatuan());
-            totalTagihan += (item.getHarga() == null)?0:item.getHarga();
+            if(item.getService() != null) {
+                list.add(item.getService().getJenis() + " | Rp. " + item.getService().getHarga() + "/" + item.getService().getSatuan());
+            }
+            totalTagihan += (item.getService() == null) ? 0 : item.getService().getHarga();
         }
 
         String[] arrayPilihan = list.toArray(new String[list.size()]);
@@ -157,16 +158,16 @@ public class DetailPesananActivity extends AppCompatActivity {
         // set data
         lvLayananPesan.setAdapter(adapter);
 
-        if (transaksi.getStatus().equals("sampai-laundry")){
+        if (transaksi.getStatus().equals("sampai-laundry")) {
             btnDetailPesan.setVisibility(View.VISIBLE);
             btnDetailPesan.setText("Cuci");
-        }else if (transaksi.getStatus().equals("Cuci-laundry")){
+        } else if (transaksi.getStatus().equals("Cuci-laundry")) {
             btnDetailPesan.setVisibility(View.VISIBLE);
             btnDetailPesan.setText("Kering");
-        }else if (transaksi.getStatus().equals("Kering-laundry")){
+        } else if (transaksi.getStatus().equals("Kering-laundry")) {
             btnDetailPesan.setVisibility(View.VISIBLE);
             btnDetailPesan.setText("Setrika");
-        }else if (transaksi.getStatus().equals("Setrika-laundry")){
+        } else if (transaksi.getStatus().equals("Setrika-laundry")) {
             btnDetailPesan.setVisibility(View.VISIBLE);
             btnDetailPesan.setText("Selesai");
         }
@@ -181,46 +182,46 @@ public class DetailPesananActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.btn_detail_pesanan)
-    public void processPesanan(){
+    public void processPesanan() {
         tampilDialog.showLoading();
         mSPLogin = getSharedPreferences("Login", Context.MODE_PRIVATE);
         token = mSPLogin.getString("token", null);
 
-        Log.i(TAG, "cancelPesanan: "+token+" : "+transaksi.getId());
+        Log.i(TAG, "cancelPesanan: " + token + " : " + transaksi.getId());
 
         // set status
         if (transaksi.getStatus().equals("sampai-laundry")) {
             transaksi.setStatus("Cuci-laundry");
-        }else if (transaksi.getStatus().equals("Cuci-laundry")) {
+        } else if (transaksi.getStatus().equals("Cuci-laundry")) {
             transaksi.setStatus("Kering-laundry");
-        }else if (transaksi.getStatus().equals("Kering-laundry")) {
+        } else if (transaksi.getStatus().equals("Kering-laundry")) {
             transaksi.setStatus("Setrika-laundry");
-        }else if (transaksi.getStatus().equals("Setrika-laundry")){
+        } else if (transaksi.getStatus().equals("Setrika-laundry")) {
             transaksi.setStatus("Selesai-laundry");
         }
 
         DataService dataService = APIClient.getClient().create(DataService.class);
-        dataService.postCancelTransaksi("Bearer " + token,transaksi).enqueue(new Callback<ResponseBody>() {
+        dataService.postCancelTransaksi("Bearer " + token, transaksi).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 tampilDialog.dismissLoading();
                 if (response.isSuccessful()) {
-                    tampilDialog.showDialog("Information", "Transaksi di batalkan","main-activity");
-                }else {
-                    tampilDialog.showDialog("Failed", response.message(),"");
+                    tampilDialog.showDialog("Information", "Transaksi di batalkan", "main-activity");
+                } else {
+                    tampilDialog.showDialog("Failed", response.message(), "");
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 tampilDialog.dismissLoading();
-                tampilDialog.showDialog("Failed", t.getMessage(),"");
+                tampilDialog.showDialog("Failed", t.getMessage(), "");
             }
         });
     }
 
     @OnClick(R.id.btn_scan_barcode)
-    public void scanBarcode(){
+    public void scanBarcode() {
         startScanning();
     }
 
