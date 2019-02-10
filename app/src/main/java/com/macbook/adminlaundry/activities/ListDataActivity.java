@@ -63,6 +63,8 @@ public class ListDataActivity extends AppCompatActivity {
     @OnClick(R.id.fab_add_data)
     public void addData(){
         Intent intent = new Intent(this,DetailDataActivity.class);
+        intent.putExtra("menu",menu);
+        intent.putExtra("typeDetail","add");
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

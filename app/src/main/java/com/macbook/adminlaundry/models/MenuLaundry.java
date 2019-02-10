@@ -21,6 +21,13 @@ public class MenuLaundry {
     public MenuLaundry() {
     }
 
+    public MenuLaundry(String id, String jenis, Integer harga, String satuan) {
+        this.id = id;
+        this.jenis = jenis;
+        this.harga = harga;
+        this.satuan = satuan;
+    }
+
     public MenuLaundry(String jenis, Integer harga, String satuan) {
         this.jenis = jenis;
         this.harga = harga;

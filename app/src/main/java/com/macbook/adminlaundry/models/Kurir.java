@@ -25,6 +25,19 @@ public class Kurir {
     @Expose
     private List<String> roles = null;
 
+    public Kurir(String id, String username, String password, String nama) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.nama = nama;
+    }
+
+    public Kurir(String username, String password, String nama) {
+        this.username = username;
+        this.password = password;
+        this.nama = nama;
+    }
+
     public String getId() {
         return id;
     }

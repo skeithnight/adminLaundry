@@ -21,6 +21,21 @@ public class Cabang {
     @Expose
     private String alamat;
 
+    public Cabang(String id, String nama, Double latitude, Double longitude, String alamat) {
+        this.id = id;
+        this.nama = nama;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.alamat = alamat;
+    }
+
+    public Cabang(String nama, Double latitude, Double longitude, String alamat) {
+        this.nama = nama;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.alamat = alamat;
+    }
+
     public String getId() {
         return id;
     }

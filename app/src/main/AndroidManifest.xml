@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
             android:allowBackup="true"
@@ -14,6 +17,9 @@
             android:roundIcon="@drawable/logooxy"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyC7WndnuxtCtS8Q_Fc-5IZ7J7Pyhaa6Gq0"/>
         <activity
                 android:name=".MainActivity"
                 android:label="@string/app_name">
@@ -37,7 +43,6 @@
         </activity>
         <activity
                 android:label="Detail Data"
-                android:parentActivityName=".activities.ListDataActivity"
                 android:name=".activities.DetailDataActivity">
         </activity>
     </application>

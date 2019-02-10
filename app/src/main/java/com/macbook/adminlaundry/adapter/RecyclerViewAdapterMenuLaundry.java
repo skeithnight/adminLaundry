@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.google.gson.Gson;
 import com.macbook.adminlaundry.R;
 import com.macbook.adminlaundry.activities.DetailDataActivity;
 import com.macbook.adminlaundry.activities.ListDataActivity;
@@ -44,7 +45,7 @@ public class RecyclerViewAdapterMenuLaundry extends RecyclerView.Adapter<Recycle
 
     @Override
     public void onBindViewHolder(final RecyclerViewAdapterMenuLaundry.MyViewHolder holder, int position) {
-        MenuLaundry menuLaundry = menuLaundryArrayList.get(position);
+        final MenuLaundry menuLaundry = menuLaundryArrayList.get(position);
 
         holder.namaLaundry.setText(menuLaundry.getJenis());
         holder.hargaLaundry.setText("Rp. "+String.valueOf(menuLaundry.getHarga())+ " /"+menuLaundry.getSatuan().toUpperCase());
@@ -55,7 +56,10 @@ public class RecyclerViewAdapterMenuLaundry extends RecyclerView.Adapter<Recycle
 
                 Intent intent = new Intent(holder.mView.getContext(), DetailDataActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("menu","menu-laundry");
+                intent.putExtra("menu","Layanan");
+                Gson gson = new Gson();
+                intent.putExtra("data",gson.toJson(menuLaundry));
+                intent.putExtra("typeDetail","detail");
                 holder.mView.getContext().startActivity(intent);
             }
         });
