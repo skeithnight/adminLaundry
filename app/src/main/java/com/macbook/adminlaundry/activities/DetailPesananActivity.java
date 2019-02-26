@@ -70,7 +70,7 @@ public class DetailPesananActivity extends AppCompatActivity {
 
         //        Blink ID
         try {
-            MicroblinkSDK.setLicenseFile("MB_com.macbook.adminlaundry_Pdf417Mobi_Android_2019-02-25.mblic", this);
+            MicroblinkSDK.setLicenseFile("MB_com.macbook.adminlaundry_Pdf417Mobi_Android_2019-03-28.mblic", this);
             // setup views, as you would normally do in onCreate callback
 
             // create Pdf417Recognizer

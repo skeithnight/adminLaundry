@@ -288,9 +288,9 @@ public class DetailDataActivity extends AppCompatActivity {
         String password = passwordKurir.getText().toString();
 
         if (!typeDetail.equals("add")) {
-            kurir = new Kurir(kurir.getId(), nama, username, password);
+            kurir = new Kurir(kurir.getId(), username, password, nama, true);
         } else {
-            kurir = new Kurir(nama, username, password);
+            kurir = new Kurir(username, password, nama, true);
         }
         if (validasiDataKurir()) {
             Gson gson = new Gson();
